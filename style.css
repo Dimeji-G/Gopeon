@@ -1,4 +1,3 @@
-
 :root {
   --primary: #2c3e50;
   --accent: #3498db;
@@ -52,26 +51,212 @@ header {
   margin-top: 1rem;
 }
 
-.features {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
+.hero-benefits {
   padding: 4rem 5%;
+  text-align: center;
 }
 
-.feature {
-  text-align: center;
-  padding: 2rem;
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.benefit-card {
   background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  transition: transform 0.3s;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+}
+
+.benefit-card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.benefit-card h3 {
+  margin: 1rem;
+  color: var(--primary);
+}
+
+.benefit-card p {
+  margin: 0 1rem 1rem;
+  color: #666;
+}
+
+.product-categories {
+  padding: 4rem 5%;
+  background: #f1f5f9;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.category-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.category-card h3 {
+  text-align: center;
+}
+
+.category-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.category-content img {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.category-content ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.category-content li {
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+.testimonials {
+  padding: 4rem 5%;
+  text-align: center;
+}
+
+.testimonial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.testimonial {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.testimonial img {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  padding: 4rem 5%;
+  background: var(--primary);
+  color: white;
+  text-align: center;
+}
+
+.stat-card h3 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  color: var(--accent);
+}
+
+h2 {
+  text-align: center;
+  font-size: 2rem;
+  color: var(--primary);
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .category-content {
+    flex-direction: column;
+  }
+  
+  .category-content img {
+    margin-top: 1rem;
+  }
+  
+  .nav-links {
+    display: none;
+  }
+
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  }
+}
+
+/* Dropdown Menu for Navbar */
+@media (max-width: 769px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: var(--primary);
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 100%;
+    z-index: 1000;
+  }
+
+  .nav-links a {
+    padding: 1rem;
+    border-bottom: 1px solid #fff;
+    color: black;
+    text-align: center;
+  }
+
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+
+  .nav-links a:hover {
+    background-color: var(--accent);
+  }
+
+  .nav-toggle {
+    display: block;
+    background: var(--primary);
+    color: white;
+    padding: 1rem;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  .nav-toggle.active + .nav-links {
+    display: flex;
+  }
 }
 
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 1rem;
-  padding: 2rem 5%;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
 }
 
 .product-card {
@@ -117,4 +302,32 @@ footer {
   text-align: center;
   padding: 1rem;
   margin-top: 2rem;
+}
+
+/* Contact Section */
+.contact {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  text-align: center;
+}
+
+.contact h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.contact-info p {
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
+}
+
+.contact-info a {
+  font-weight: bold;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.contact-info a:hover {
+  color: #3498db;
+  text-decoration: underline;
 }

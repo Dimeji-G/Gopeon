@@ -1,56 +1,92 @@
-
-// Sample product data (replace with your actual products)
-const products = {
-  food: [
-    { name: 'Fresh Chicken', price: '$9.99', image: 'https://images.unsplash.com/photo-1587593810167-a84920ea0781' },
-    // Add more food items here
-  ],
-  electronics: [
-    { name: 'Smart Watch', price: '$199.99', image: 'https://images.unsplash.com/photo-1546868871-7041f2a55e12' },
-    // Add more electronics items here
-  ]
+// 1. CONFIG: map each category key → folder name
+const categoryConfig = {
+  food:      'Frozen',
+  drinks:    'Drinks',
+  biscuits:  'Biscuits',
+  electronics: 'Electronics'
 };
 
-let currentPage = {
-  food: 0,
-  electronics: 0
+// 2. DYNAMIC: scan each folder to get its image count
+//    (you’ll need to fill in a real implementation of getImageCount)
+function getImageCount(folderName) {
+  // TODO: replace this stub with your own logic—e.g. 
+  //       an API call, or a server-side endpoint that returns file counts.
+  // For now we’ll just fall back to your hard-coded numbers:
+  const fallback = { Frozen:110, Drinks:36, Biscuits:19, Electronics:0 };
+  return fallback[folderName] || 0;
+}
+
+// 3. GENERATE product arrays
+function generateProductData(folderName, count) {
+  return Array.from({ length: count }, (_, i) => ({
+    name:   `${folderName} Item ${i+1}`,
+    image:  `Images/${folderName}/${i+1}.jpeg`
+  }));
+}
+
+const products = {};
+for (let [key, folder] of Object.entries(categoryConfig)) {
+  const count = getImageCount(folder);
+  products[key] = generateProductData(folder, count);
+}
+
+// 4. PAGINATION state
+const currentPage = Object.fromEntries(
+  Object.keys(categoryConfig).map(k => [k, 0])
+);
+
+const itemsPerPage = {
+  initial: 5,
+  loadMore: 10
 };
 
-const itemsPerPage = 20;
-
-function createProductCard(product) {
+// 5. RENDERING
+function createProductCard({ name, image }) {
   return `
     <div class="product-card">
-      <img src="${product.image}" alt="${product.name}">
+      <a href="${image}">
+        <img src="${image}" alt="${name}">
+      </a>
       <div class="product-info">
-        <h3>${product.name}</h3>
-        <p>${product.price}</p>
+        <h3>${name}</h3>
       </div>
     </div>
   `;
 }
 
 function loadMore(category) {
+  const page = currentPage[category];
+  const start = page * itemsPerPage.loadMore;
+  const count = (page === 0 ? itemsPerPage.initial : itemsPerPage.loadMore);
+  const slice = products[category].slice(start, start + count);
+
+  // append cards
   const grid = document.getElementById(`${category}Grid`);
-  const start = currentPage[category] * itemsPerPage;
-  const items = products[category].slice(start, start + itemsPerPage);
-  
-  if (items.length > 0) {
-    items.forEach(item => {
-      grid.innerHTML += createProductCard(item);
-    });
-    currentPage[category]++;
-  }
-  
-  if ((currentPage[category] * itemsPerPage) >= products[category].length) {
+  slice.forEach(p => grid.insertAdjacentHTML('beforeend', createProductCard(p)));
+
+  // advance page
+  currentPage[category]++;
+
+  // hide “load more” if done
+  const totalLoaded = currentPage[category] * itemsPerPage.loadMore;
+  if (totalLoaded >= products[category].length) {
     document.querySelector(`#${category} .load-more`).style.display = 'none';
   }
 }
 
-// Initialize product grids
+// 6. INITIALIZE on page load
 document.addEventListener('DOMContentLoaded', () => {
-  if (window.location.pathname.includes('products.html')) {
-    loadMore('food');
-    loadMore('electronics');
-  }
+  if (!window.location.pathname.includes('products.html')) return;
+
+  // for each category: render first batch *and* attach its button
+  Object.keys(categoryConfig).forEach(category => {
+    loadMore(category);
+
+    const btn = document.querySelector(`#${category} .load-more`);
+    if (btn) {
+      btn.addEventListener('click', () => loadMore(category));
+      // hide button immediately if no items at all
+      if (products[category].length === 0) btn.style.display = 'none';
+    }
+  });
 });
